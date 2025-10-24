@@ -1,0 +1,35 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model parametros {
+  id              Int                          @id @default(autoincrement())
+  unidade         String                   
+  segregacao_fila Boolean                      @default(false)
+  exibir_fila     Boolean                      @default(false)
+  filas           parametro_filas_segregadas[]
+}
+
+model parametro_filas_segregadas {
+  id           Int        @id @default(autoincrement())
+  parametro_id Int
+  nome_fila    String     
+  parametro    parametros @relation(fields: [parametro_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fila_parametros_fk")
+}
+
+model caminhoes_chamados {
+  id           Int      @id @default(autoincrement())
+  nr_romaneio  String   
+  unidade      String  
+  data_chamado DateTime 
+  fila         String   
+  placa        String
+  nome_motorista String
+  telefone_motorista String
+  cultura      String
+}
