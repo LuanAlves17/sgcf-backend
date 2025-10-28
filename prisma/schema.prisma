@@ -12,7 +12,8 @@ model parametros {
   unidade         String                   
   segregacao_fila Boolean                      @default(false)
   exibir_fila     Boolean                      @default(false)
-  filas           parametro_filas_segregadas[]
+  filas           parametro_filas_segregadas[] 
+  tempo_mudanca_fila Int                         @default(15000)
 }
 
 model parametro_filas_segregadas {
@@ -32,4 +33,5 @@ model caminhoes_chamados {
   nome_motorista String
   telefone_motorista String
   cultura      String
+  tipo_romaneio String
 }
