@@ -1,0 +1,24 @@
+version: "3.9"
+
+services:
+  gcf-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: gcf-backend
+    container_name: gcf-backend-prd
+    restart: always
+    ports:
+      - "3002:3002"
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      PORT: 3002
+      DATABASE_URL: ${DATABASE_URL}
+    networks:
+      - gcf_net
+
+networks:
+  gcf_net:
+    external: true
