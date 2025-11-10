@@ -15,7 +15,7 @@ async function startMonitor() {
     const newData = await monitorApex();
     if (newData && newData !== lastData) {
       lastData = newData;
-      broadcast(newData);
+      broadcast(JSON.stringify({ type: "sync", romaneios: JSON.parse(newData) }));
     }
   }, 1000);
 }
@@ -25,7 +25,10 @@ function initWebSocket(server) {
 
   wss.on("connection", (ws) => {
     console.log("[WS] Nova conexão recebida");
-    if (lastData) ws.send(lastData);
+
+    if (lastData) {
+      ws.send(JSON.stringify({ type: "sync", romaneios: JSON.parse(lastData) }));
+    }
   });
 
   startMonitor();

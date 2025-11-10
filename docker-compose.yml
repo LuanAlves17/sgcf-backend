@@ -1,21 +1,14 @@
-version: "3.9"
-
 services:
-  gcf-backend:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: gcf-backend
-    container_name: gcf-backend-prd
-    restart: always
+  backend:
+    build: .
+    image: gcf-backend:latest
     ports:
-      - "3002:3002"
-    env_file:
-      - .env
+      - "3301:3301"
     environment:
-      NODE_ENV: production
-      PORT: 3002
-      DATABASE_URL: ${DATABASE_URL}
+      DB_HOST: gcfpostgres  # nome do container do PostgreSQL
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: postgres
     networks:
       - gcf_net
 
