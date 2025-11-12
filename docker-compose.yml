@@ -1,17 +1,43 @@
+version: "3.8"
+
 services:
   backend:
     build: .
-    image: gcf-backend:latest
+    container_name: gcf-backend
     ports:
       - "3301:3301"
     environment:
-      DB_HOST: gcfpostgres  # nome do container do PostgreSQL
+      DB_HOST: postgres
       DB_USER: postgres
       DB_PASSWORD: postgres
       DB_NAME: postgres
+      DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/postgres?schema=public"
+      APEX_API_URL: "http://ebsdev.copasul.coop:8080/ords/xxapex_ebs/qmonitor/v1/"
+      NODE_ENV: production
+      PORT: 3301
+    depends_on:
+      - postgres
     networks:
       - gcf_net
 
+  postgres:
+    image: postgres:16-alpine
+    container_name: gcf-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - gcf_net
+
+volumes:
+  pgdata:
+
 networks:
   gcf_net:
-    external: true
+    driver: bridge

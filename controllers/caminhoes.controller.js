@@ -26,14 +26,3 @@ exports.getEsperando = async (req, res, next) => {
     next(err);
   }
 };
-
-exports.marcarEntrada = async (req, res, next) => {
-  try {
-    const { nr_romaneio } = req.params;
-    const result = await service.marcarComoEntrou(nr_romaneio);
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
-
-}

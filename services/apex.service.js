@@ -14,8 +14,6 @@ exports.monitorApex = async () => {
 
   const chamadosMap = new Map(chamados.map((c) => [c.nr_romaneio, c]));
 
-  const atualizados = [];
-
   for (const item of data) {
     if (item.dt_pesagem_1 && chamadosMap.has(item.nr_romaneio)) {
       const chamado = chamadosMap.get(item.nr_romaneio);
@@ -24,20 +22,8 @@ exports.monitorApex = async () => {
         where: { id: chamado.id },
         data: { entrou: true },
       });
-
-      atualizados.push({
-        ...chamado,
-        entrou: true,
-        unidade: item.unidade,
-      });
+      
     }
-  }
-
-  if (atualizados.length > 0) {
-    sendToAll({
-      type: "atualizacao_status",
-      romaneios: atualizados,
-    });
   }
 
   return JSON.stringify(data);

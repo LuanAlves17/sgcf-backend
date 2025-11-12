@@ -1,10 +1,14 @@
 #!/bin/sh
 set -e
 
-npx prisma migrate reset --force
+echo "⏳ Aguardando Postgres ficar disponível..."
+until pg_isready -h "$DB_HOST" -p 5432 -U "$DB_USER" > /dev/null 2>&1; do
+  sleep 1
+done
 
-echo "Rodando migrations..."
-npx prisma migrate dev --name test
+echo "✅ Banco disponível. Aplicando migrations..."
+npx prisma migrate deploy
+npx prisma generate
 
-echo "Iniciando backend..."
-exec node server.js
+echo "🚀 Iniciando aplicação..."
+exec "$@"
