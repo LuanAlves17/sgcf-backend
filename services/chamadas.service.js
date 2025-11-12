@@ -31,8 +31,8 @@ exports.criarChamada = async ({ unidade, fila, romaneios }) => {
   await prisma.caminhoes_chamados.createMany({
     data: romaneios.map((r) => ({
       nr_romaneio: r.nr_romaneio,
-      placa: r.placa,
-      nome_motorista: r.nome_motorista,
+      nr_placa_veiculo: r.nr_placa_veiculo,
+      nm_motorista: r.nm_motorista,
       unidade,
       fila,
       data_chamado: new Date(),

@@ -4,6 +4,7 @@ CREATE TABLE "parametros" (
     "unidade" TEXT NOT NULL,
     "segregacao_fila" BOOLEAN NOT NULL DEFAULT false,
     "exibir_fila" BOOLEAN NOT NULL DEFAULT false,
+    "tempo_mudanca_fila" INTEGER NOT NULL DEFAULT 15000,
 
     CONSTRAINT "parametros_pkey" PRIMARY KEY ("id")
 );
@@ -24,8 +25,12 @@ CREATE TABLE "caminhoes_chamados" (
     "unidade" TEXT NOT NULL,
     "data_chamado" TIMESTAMP(3) NOT NULL,
     "fila" TEXT NOT NULL,
-    "placa" TEXT NOT NULL,
-    "nome_motorista" TEXT NOT NULL,
+    "nr_placa_veiculo" TEXT NOT NULL,
+    "nm_motorista" TEXT NOT NULL,
+    "telefone_motorista" TEXT NOT NULL,
+    "cultura" TEXT NOT NULL,
+    "tipo_romaneio" TEXT NOT NULL,
+    "entrou" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "caminhoes_chamados_pkey" PRIMARY KEY ("id")
 );

@@ -18,10 +18,6 @@ exports.getChamadosHoje = async (req, res, next) => {
   }
 };
 
-// exports.getCulturas = async (req, res, next) => {
-
-// }
-
 exports.getEsperando = async (req, res, next) => {
   try {
     const data = await service.getEsperando(req.params.unidade);
@@ -30,3 +26,14 @@ exports.getEsperando = async (req, res, next) => {
     next(err);
   }
 };
+
+exports.marcarEntrada = async (req, res, next) => {
+  try {
+    const { nr_romaneio } = req.params;
+    const result = await service.marcarComoEntrou(nr_romaneio);
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+
+}

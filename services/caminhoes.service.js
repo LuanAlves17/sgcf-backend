@@ -36,3 +36,18 @@ exports.getEsperando = async (unidade) => {
   if (!Array.isArray(data)) throw new Error("Formato inesperado do APEX");
   return data.filter((r) => r.unidade === unidade);
 };
+
+exports.marcarComoEntrou = async (nr_romaneio) => {
+  if (!nr_romaneio) throw new Error("nr_romaneio é obrigatório.");
+
+  const atualizado = await prisma.caminhoes_chamados.updateMany({
+    where: { nr_romaneio: String(nr_romaneio) },
+    data: { entrou: true },
+  });
+
+  if (atualizado.count === 0) {
+    throw new Error(`Romaneio ${nr_romaneio} não encontrado ou já marcado como entrou.`);
+  }
+
+  return { message: `Romaneio ${nr_romaneio} marcado como entrou.` };
+};

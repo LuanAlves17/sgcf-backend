@@ -30,9 +30,10 @@ model caminhoes_chamados {
   unidade      String  
   data_chamado DateTime 
   fila         String   
-  placa        String
-  nome_motorista String
+  nr_placa_veiculo  String
+  nm_motorista String
   telefone_motorista String
   cultura      String
   tipo_romaneio String
+  entrou   Boolean      @default(false)
 }
