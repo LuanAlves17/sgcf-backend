@@ -3,7 +3,7 @@ const http = require("http");
 const app = require("./app");
 const { initWebSocket } = require("./config/websocket");
 
-const PORT = process.env.PORT || 3301;
+const PORT = process.env.PORT || 3333;
 const server = http.createServer(app);
 
 initWebSocket(server);

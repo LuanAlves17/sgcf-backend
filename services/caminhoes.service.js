@@ -6,7 +6,11 @@ const { toCampoGrandeISO } = require("../utils/timezone");
 const APEX_ENDPOINT = "caminhoes_por_unidade";
 
 exports.getChamados = async (unidade) => {
-  const data = await prisma.caminhoes_chamados.findMany({ where: { unidade } });
+  const data = await prisma.caminhoes_chamados.findMany({
+    where: {
+      ...(unidade ? { unidade } : {}),
+    },
+  });
   return data.map((c) => ({
     ...c,
     data_chamado: toCampoGrandeISO(c.data_chamado),
