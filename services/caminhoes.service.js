@@ -34,12 +34,14 @@ exports.getChamadosHoje = async (unidade) => {
   }));
 };
 
+
 exports.getEsperando = async (unidade) => {
   const response = await apexClient.get(APEX_ENDPOINT);
-  const data = response.data.items;
-  if (!Array.isArray(data)) throw new Error("Formato inesperado do APEX");
-  return data.filter((r) => r.unidade === unidade);
+  const data = response.data.items || [];
+
+  return data.filter((r) => String(r.unidade) === String(unidade));
 };
+
 
 exports.marcarComoEntrou = async (nr_romaneio) => {
   if (!nr_romaneio) throw new Error("nr_romaneio é obrigatório.");
@@ -54,4 +56,27 @@ exports.marcarComoEntrou = async (nr_romaneio) => {
   }
 
   return { message: `Romaneio ${nr_romaneio} marcado como entrou.` };
+};
+
+exports.getAguardandoEntrada = async (unidade) => {
+  const response = await apexClient.get(APEX_ENDPOINT);
+  const apexData = response.data.items || [];
+  
+  const chamados = await prisma.caminhoes_chamados.findMany({
+    where: {
+      unidade,
+      entrou: false,
+    },
+  });
+
+  const apexMap = new Map(apexData.map((r) => [String(r.nr_romaneio), r]));
+  
+  const aguardandoEntrada = chamados
+    .filter((c) => apexMap.has(String(c.nr_romaneio)))
+    .map((c) => ({
+      ...c,
+      data_chamado: toCampoGrandeISO(c.data_chamado),
+    }));
+
+  return aguardandoEntrada;
 };

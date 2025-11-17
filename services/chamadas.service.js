@@ -1,5 +1,5 @@
 const prisma = require("../config/db");
-const { sendToAll } = require("../config/websocket");
+const { broadcast } = require("../config/websocket");
 
 exports.criarChamada = async ({ unidade, fila, romaneios }) => {
   if (!unidade || !fila || !romaneios?.length) {
@@ -27,7 +27,7 @@ exports.criarChamada = async ({ unidade, fila, romaneios }) => {
     romaneios: romaneios.map((r) => ({ ...r, fila })),
   };
 
-  sendToAll(payload);
+  broadcast(payload);
 
   return { message: "Chamadas registradas com sucesso." };
 };

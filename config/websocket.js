@@ -1,43 +1,23 @@
 const { WebSocketServer } = require("ws");
-const { monitorApex } = require("../services/apex.service");
 
-let wss;
-let lastData = "";
+let wss = null;
 
 function broadcast(data) {
+  if (!wss) return;
+  const json = JSON.stringify(data);
+
   wss.clients.forEach((client) => {
-    if (client.readyState === 1) client.send(data);
+    if (client.readyState === 1) client.send(json);
   });
 }
 
-async function startMonitor() {
-  setInterval(async () => {
-    const newData = await monitorApex();
-    if (newData && newData !== lastData) {
-      lastData = newData;
-      broadcast(newData);
-    }
-  }, 1000);
-}
-
-function initWebSocket(server) {
+function startWSS(server) {
   wss = new WebSocketServer({ server });
+  console.log("[WS] Servidor WebSocket inicializado");
 
   wss.on("connection", (ws) => {
-    console.log("[WS] Nova conexão recebida");
-    if (lastData) ws.send(lastData);
-  });
-
-  startMonitor();
-}
-
-function sendToAll(payload) {
-  if (!wss) return;
-  wss.clients.forEach((client) => {
-    if (client.readyState === 1) {
-      client.send(JSON.stringify(payload));
-    }
+    console.log("[WS] Cliente conectado");
   });
 }
 
-module.exports = { initWebSocket, sendToAll };
+module.exports = { startWSS, broadcast };

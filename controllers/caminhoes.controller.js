@@ -26,3 +26,12 @@ exports.getEsperando = async (req, res, next) => {
     next(err);
   }
 };
+
+exports.getAguardandoEntrada = async (req, res, next) => {
+  try {
+    const data = await service.getAguardandoEntrada(req.params.unidade);
+    res.json(data);
+  } catch (err) {
+    next(err);
+  }
+};
